@@ -1,0 +1,75 @@
+#include <stdio.h>
+
+void SMM(int n, int A[][n], int B[][n], int C[][n]) {
+    if (n == 1) {
+        C[0][0] = A[0][0] * B[0][0];
+        return;
+    }
+    int NS = n / 2;
+    int A11[NS][NS], A12[NS][NS], A21[NS][NS], A22[NS][NS];
+    int B11[NS][NS], B12[NS][NS], B21[NS][NS], B22[NS][NS];
+    int C11[NS][NS], C12[NS][NS], C21[NS][NS], C22[NS][NS];
+    for (int i = 0; i <NS; i++) {
+        for (int j = 0; j <NS; j++) {
+            A11[i][j] = A[i][j];
+            A12[i][j] = A[i][j +NS];
+            A21[i][j] = A[i +NS][j];
+            A22[i][j] = A[i +NS][j +NS];
+            B11[i][j] = B[i][j];
+            B12[i][j] = B[i][j +NS];
+            B21[i][j] = B[i +NS][j];
+            B22[i][j] = B[i +NS][j +NS];
+        }
+    }
+    int P1[NS][NS], P2[NS][NS], P3[NS][NS], P4[NS][NS], P5[NS][NS], P6[NS][NS], P7[NS][NS];
+    SMM(NS, A11, B12, P1);
+    SMM(NS, A12, B22, P2);
+    SMM(NS, A21, B11, P3);
+    SMM(NS, A22, B21, P4);
+    SMM(NS, A11, B11, P5);
+    SMM(NS, A12, B21, P6);
+    SMM(NS, A21, B12, P7);
+    for (int i = 0; i <NS; i++) {
+        for (int j = 0; j <NS; j++) {
+            C11[i][j] = P5[i][j] + P4[i][j] - P2[i][j] + P6[i][j];
+            C12[i][j] = P1[i][j] + P2[i][j];
+            C21[i][j] = P3[i][j] + P4[i][j];
+            C22[i][j] = P5[i][j] + P1[i][j] - P3[i][j] - P7[i][j];
+        }
+    }
+    for (int i = 0; i <NS; i++) {
+        for (int j = 0; j <NS; j++) {
+            C[i][j] = C11[i][j];
+            C[i][j +NS] = C12[i][j];
+            C[i +NS][j] = C21[i][j];
+            C[i +NS][j +NS] = C22[i][j];
+        }
+    }
+}
+int main() {
+    int n;
+    printf("Enter the size of matrices (power of 2): ");
+    scanf("%d", &n);
+    int A[n][n], B[n][n], C[n][n];
+    printf("Enter elements of matrix A:\n");
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            scanf("%d", &A[i][j]);
+        }
+    }
+    printf("Enter elements of matrix B:\n");
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            scanf("%d", &B[i][j]);
+        }
+    }
+    SMM(n, A, B, C);
+    printf("Resultant matrix C:\n");
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            printf("%d ", C[i][j]);
+        }
+        printf("\n");
+    }
+    return 0;
+}
