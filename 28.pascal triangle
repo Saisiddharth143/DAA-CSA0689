@@ -1,25 +1,21 @@
 #include <stdio.h>
-int binomialCoeff(int n, int k) {
-    if (k == 0 || k == n)
-        return 1;
-    return binomialCoeff(n - 1, k - 1) + binomialCoeff(n - 1, k);
-}
-void printPascalTriangle(int rows) {
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j <= i; j++) {
-            printf("%d ", binomialCoeff(i, j));
+int main()
+{
+    int no_row,c=1,blk,i,j;
+    printf("Input number of rows: ");
+    scanf("%d",&no_row);
+    for(i=0;i<no_row;i++)
+    {
+        for(blk=1;blk<=no_row-i;blk++)
+        printf("  ");
+        for(j=0;j<=i;j++)
+        {
+            if (j==0||i==0)
+                c=1;
+            else
+               c=c*(i-j+1)/j;
+            printf("% 4d",c);
         }
         printf("\n");
     }
-}
-int main() {
-    int rows;
-    printf("Enter the number of rows for Pascal's Triangle: ");
-    scanf("%d", &rows);
-    if (rows <= 0) {
-        printf("Invalid input.\n");
-    } else {
-        printPascalTriangle(rows);
-    }
-    return 0;
 }
